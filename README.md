@@ -1,36 +1,30 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PlainSpeak
 
-## Getting Started
+Paste legal or government text and get a plain-language version: a summary, key points,
+what it means for you, an action checklist, and notes on what the text leaves unclear.
+The prompt is built to preserve obligations, deadlines and exceptions rather than smooth them away.
 
-First, run the development server:
+Built with Next.js 16, React 19, Tailwind 4 and the OpenAI API (`gpt-4o-mini`).
+
+## Run it
 
 ```bash
+npm install
+cp .env.example .env.local   # then add your OpenAI API key
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## How it works
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `app/page.tsx` — the UI (audience picker, input, structured output, error states).
+- `app/api/translate/route.ts` — validates input (length cap, audience allowlist), wraps the
+  document in `<document>` tags so instructions inside it are treated as data, and requests JSON output.
+- `lib/types.ts` — shared constants and the result type.
 
-## Learn More
+## Known limitations
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- No rate limiting or auth yet; add both before exposing a deployment publicly (every request costs API credit).
+- Nothing verifies programmatically that every obligation and exception survives the rewrite; the model is only instructed to.
+- Not legal advice.
